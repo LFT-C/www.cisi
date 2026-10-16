@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)file:///D:/huancun/verify-page/index.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>教育部学籍在线验证报告</title>
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{
+    --brand:#1b4f8c;
+    --brand-soft:#eaf1f9;
+    --ink:#1c1c1e;
+    --ink-2:#48484a;
+    --ink-3:#8a8a8e;
+    --line:#eceef1;
+    --bg:#f4f5f7;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","微软雅黑","PingFang SC","Hiragino Sans GB",sans-serif;
+  }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:var(--font); font-size:15px; line-height:1.6;
+    -webkit-text-size-adjust:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:480px; margin:0 auto; min-height:100vh; background:#fff;
+    box-shadow:0 0 0 1px rgba(16,24,40,.05), 0 8px 30px rgba(16,24,40,.06);
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- 顶部：标题栏 + 导航栏 ---------- */
+  .topbar{ display:flex; align-items:center; gap:10px; padding:11px 14px; border-bottom:1px solid var(--line); }
+  .topbar .ico{ width:20px; height:20px; flex:0 0 auto; color:var(--ink-2); display:block; }
+  .topbar .ttl{ flex:1 1 auto; font-size:14.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center; }
+
+  .navbar{ display:flex; align-items:center; gap:8px; padding:12px 14px; }
+  /* 机构 logo + 名称：整块一个图片位，换同目录的 logo.png 即可 */
+  .navbar .orgbox{ position:relative; display:inline-flex; align-items:center; min-height:20px; }
+  .navbar .orglogo{
+    position:absolute; left:0; top:50%; transform:translateY(-50%);
+    height:36px; width:auto; max-width:180px; background:#fff; display:block;
+  }
+  .navbar .orgname{ font-size:15px; font-weight:600; }
+  .navbar .divider{ color:var(--ink-3); margin:0 2px; }
+  .navbar .channel{ font-size:13px; color:var(--ink-2); }
+  .navbar .spacer{ flex:1 1 auto; }
+  .navbar .ico{ width:19px; height:19px; color:var(--ink-2); display:block; }
+
+  /* ---------- 语种 / 操作条 ---------- */
+  .langbar{
+    display:flex; align-items:center; gap:6px;
+    min-height:58px; padding:8px 14px; background:#fff;
+    border-top:0; border-bottom:0;
+    font-size:14px;
+  }
+  .langbar .lbl{ color:#303a38; margin-right:4px; font-size:14px; white-space:nowrap; }
+  .langbar button{
+    font:inherit; font-size:14px; min-width:0; min-height:38px; padding:5px 12px;
+    border-radius:2px; border:1px solid transparent; background:transparent;
+    color:#92999b; cursor:pointer;
+  }
+  .langbar button.active{
+    background:#eaf8f7; border-color:transparent; color:#13b8bd; font-weight:600;
+  }
+  .langbar .spacer{ flex:1 1 auto; }
+  .langbar .ico{ width:25px; height:29px; color:#8c999c; cursor:pointer; display:block; flex:0 0 auto; }
+
+  /* ---------- 报告主体 ---------- */
+  .sheet{ flex:1 1 auto; padding:26px 22px 20px; }
+  h1{
+    font-size:19px; font-weight:700; text-align:center; letter-spacing:.5px;
+    margin:0 0 20px; line-height:1.45;
+  }
+  .photo{
+    width:88px; height:128px; margin:0 auto 24px;
+    border:1px solid #dfe3e8; border-radius:3px; background:#fafbfc;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--ink-3); letter-spacing:1px; text-align:center;
+  }
+  /* 照片位：把同目录下的 photo.jpg 放上去就显示，没有这张图就显示占位文字 */
+  .photo{ position:relative; overflow:hidden; }
+  .photo .ph{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--ink-3); letter-spacing:1px; text-align:center;
+  }
+  .photo img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+  }
+
+  /* 无框两列字段 */
+  .fields{ margin:0 auto; max-width:340px; }
+  .field{ display:flex; gap:12px; padding:8px 2px; }
+  .field dt{
+    flex:0 0 78px; margin:0; color:var(--ink-3); font-size:15px; text-align:right;
+    word-break:keep-all;
+  }
+  .field dd{ flex:1 1 auto; margin:0; font-size:15px; color:var(--ink); word-break:break-all; }
+  .ph{ color:#a8adb5; }
+
+  /* ---------- 页脚 ---------- */
+  .foot{
+    padding:16px 22px 20px; text-align:center;
+    font-size:11.5px; color:#969696; line-height:1.9;
+    background:#282828;
+  }
+  .foot .issuer{ margin-bottom:2px; }
+  .foot .issuer, .foot div{ color:#969696; }
+
+  @media (min-width:481px){
+    body{ padding:24px 0; }
+    .app{ min-height:auto; border-radius:12px; overflow:hidden; }
+  }
+
+  /* ---------- 打印 / 存 PDF ---------- */
+  @page{ size:A4; margin:16mm; }
+  @media print{
+    body{ background:#fff; padding:0; font-size:12pt; }
+    .app{ max-width:none; box-shadow:none; min-height:auto; }
+    .navbar .ico,.langbar .ico,.topbar .ico{ display:none; }
+    .langbar{ background:#fff; }
+    .foot{ background:#2f3134 !important; color:#969696; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .ph{ color:#333; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+
+
+  <!-- 机构导航栏 -->
+  <div class="navbar">
+    <span class="orgbox">
+      <span class="orgname" id="navOrg">【机构称】</span>
+      <!-- 换机构 Logo：替换同目录的 logo.png 即可，别的都不用动 -->
+      <img class="orglogo" src="logo.png" alt="机构 Logo" onerror="this.style.display='none'">
+    </span>
+    <span class="divider">|</span>
+    <span class="channel" id="navChannel">在线验证</span>
+    <span class="spacer"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+  </div>
+
+  <!-- 语种 / 打印 -->
+  <div class="langbar">
+    <span class="lbl" id="langLabel">报告语种</span>
+    <button type="button" data-lang="zh" class="active">中文</button>
+    <button type="button" data-lang="en">English</button>
+    <span class="spacer"></span>
+    <svg class="ico" id="printBtn" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" title="打印 / 保存为 PDF"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" opacity=".9"></path><path d="M12 5v9" fill="none" stroke="#fff" stroke-width="2.4"></path><path d="m8.8 11.5 3.2 3.4 3.2-3.4" fill="none" stroke="#fff" stroke-width="2.4"></path><path d="M8 18h8" fill="none" stroke="#fff" stroke-width="2.2"></path></svg>
+  </div>
+
+  <!-- 报告主体 -->
+  <div class="sheet">
+    <h1 id="docTitle">教育部学籍在线验证报告</h1>
+    <div class="photo" id="photo">
+      <span class="ph">照 片 位</span>
+      <!-- 换照片：把同目录的 photo.jpg 换成你的图即可，别的都不用动 -->
+      <img src="./信息核验报告_files/photo.jpg" alt="照片" onerror="this.style.display='none'">
+    </div>
+    <dl class="fields" id="fields"><div class="field"><dt>姓名</dt><dd>梁峰韬</dd></div><div class="field"><dt>性别</dt><dd> 男 </dd></div><div class="field"><dt>出生日期</dt><dd>2003 年 07 月 05 日</dd></div><div class="field"><dt>民族</dt><dd>汉族</dd></div><div class="field"><dt>学校名称</dt><dd>中北大学</dd></div><div class="field"><dt>层次</dt><dd>本科</dd></div><div class="field"><dt>专业</dt><dd>软件工程技术</dd></div><div class="field"><dt>学制</dt><dd>4年</dd></div><div class="field"><dt>学历类别</dt><dd>普通高等教育</dd></div><div class="field"><dt>学习形式</dt><dd>普通全日制</dd></div><div class="field"><dt>入学日期</dt><dd>2019 年 09月 01 日</dd></div><div class="field"><dt>毕业日期</dt><dd>2023年 07 月 01 日</dd></div><div class="field"><dt>当前状态</dt><dd>不在籍（毕业）</dd></div><div class="field"><dt>更新日期</dt><dd>2026 年 10 月 11 日</dd></div><div class="field is-code"><dt>核验码</dt><dd id="codeValue" class="ph">A8FTRBQ229P62LXF</dd></div></dl>
+
+  </div>
+
+  <div class="foot">
+    <div class="issuer" id="footIssuer">主办单位：教育部学生服务与素质发展中心</div>
+    <div id="footCopy">Copyright © 2003-2026 学信网 All Rights Reserved</div>
+  </div>
+
+</div>
+
+<script>
+/* =======================================================================
+   要改的就是下面这一个 CONFIG，其余代码不用动。
+   value 里带【】的都是占位符，替换成真实内容即可。
+   ======================================================================= */
+const CONFIG = {
+  topTitle:  { zh: "教育部学籍在线验证报告",      en: "Verification Report" },
+  docTitle:  { zh: "教育部学籍在线验证报告",      en: "Information Verification Report" },
+  org:       { zh: "【机构名】",                en: "【Organization】" },
+  channel:   { zh: "在线验证",                    en: "Verification" },
+  issuer:    { zh: "主办单位：教育部学生服务与素质发展中心",       en: "Issued by 【Organization】" },
+  copyright: { zh: "Copyright © 2003-2026 学信网 All Rights Reserved",
+               en: "Copyright © 2026 【Organization】 All Rights Reserved" },
+  fields: [
+    { key:"name",   zh:"姓名",     en:"Name",              value:"梁峰韬" },
+    { key:"gender", zh:"性别",     en:"Gender",            value:"男" },
+    { key:"birth",  zh:"出生日期", en:"Date of Birth",     value:"2003 年 07 月 05 日" },
+    { key:"ethnic", zh:"民族",     en:"Ethnicity",         value:"汉族" },
+    { key:"org",    zh:"学校名称", en:"Organization",      value:"中北大学" },
+    { key:"level",  zh:"层次",     en:"Level",             value:"本科" },
+    { key:"major",  zh:"专业",     en:"Major",             value:"软件工程技术" },
+    { key:"system", zh:"学制",     en:"Duration",          value:"4 年" },
+    { key:"cat",    zh:"学历类别", en:"Category",          value:"普通高等教育"},
+    { key:"mode",   zh:"学习形式", en:"Mode",              value:"普通全日制" },
+    { key:"fenyuan",zh:"系所",     en:"Mode",              value:"软件学院" },
+    { key:"enroll", zh:"入学日期", en:"Enrollment Date",   value:"2019 年 09 月 01 日" },
+    { key:"status", zh:"学籍状态", en:"Status",            value:"不在籍（毕业）" },
+	{ key:"grad",   zh:"离校日期", en:"Graduation Date",   value:"2023 年 07 月 01 日" },
+	{ key:"code",   zh:"核验码",   en:"Verification Code", value:"A8FTRBQ229P62LXF", code:true },
+    { key:"updated",zh:"更新日期", en:"Last Updated",      value:"2026 年 10 月 11 日" }
+
+  ]
+};
+
+/* ------------------------- 以下不用改 ------------------------- */
+const $ = id => document.getElementById(id);
+let lang = "zh";
+
+function render(){
+  const t = k => (CONFIG[k] ? CONFIG[k][lang] : "");
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  $("topTitle").textContent = t("topTitle");
+  $("docTitle").textContent = t("docTitle");
+  $("navOrg").textContent   = t("org");
+  $("navChannel").textContent = t("channel");
+  $("langLabel").textContent = lang === "zh" ? "报告语种" : "Language";
+  $("footIssuer").textContent = t("issuer");
+  $("footCopy").textContent = t("copyright");
+  document.title = t("docTitle");
+
+  const dl = $("fields");
+  dl.innerHTML = "";
+  CONFIG.fields.forEach(f => {
+    const row = document.createElement("div");
+    row.className = "field" + (f.code ? " is-code" : "");
+    const dt = document.createElement("dt"); dt.textContent = f[lang];
+    const dd = document.createElement("dd");
+    if (f.key === "code") { dd.id = "codeValue"; }
+    dd.textContent = f.value;
+    row.append(dt, dd); dl.append(row);
+  });
+
+  // ?code=XXXX 直接把核验码填进去，方便给每个人发不同的链接
+  const q = new URLSearchParams(location.search).get("code");
+  const codeEl = $("codeValue");
+  const codeField = CONFIG.fields.find(f => f.key === "code");
+  if (q && codeEl && codeField) codeEl.textContent = q.toUpperCase();
+  if (codeEl && !q && /^【/.test(codeEl.textContent)) codeEl.classList.add("ph");
+
+}
+
+
+document.querySelectorAll(".langbar button[data-lang]").forEach(b => {
+  b.addEventListener("click", () => {
+    lang = b.dataset.lang;
+    document.querySelectorAll(".langbar button[data-lang]").forEach(x => x.classList.toggle("active", x === b));
+    render();
+  });
+});
+$("printBtn").addEventListener("click", () => window.print());
+render();
+</script>
+
+
+</body></html>
